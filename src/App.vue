@@ -1,21 +1,26 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <section class="section">
+    <div class="container">
+      <Timeline></Timeline>
+    </div>
+  </section>
+
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+import Timeline from "@/components/Timeline.vue";
 
 export default defineComponent({
   name: 'App',
   components: {
-    HelloWorld
+    Timeline,
   }
 });
 </script>
 
 <style>
+@import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

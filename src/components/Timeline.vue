@@ -1,34 +1,49 @@
 <template>
-  <div>
-    123
-  </div>
+  <nav class="is-primary panel">
+    <span class="panel-tabs">
+     <a href="" v-for="period in periods" :key="period" :class="{'is-active': period === currentPeriod}" @click.prevent="setPeriod(period)">
+       {{period}}
+     </a>
+    </span>
+
+    <a href="" v-for="post in posts" :key="post.id" class="panel-block">
+      <a href="">{{post.title}}</a>
+      <div>{{post.created.format('Do MMM')}}</div>
+    </a>
+  </nav>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
+import moment from "moment";
+import { today, thisWeek, thisMonth} from "@/mocks";
+
+type Period = 'Today' | 'This Week' | 'This Month'
 
 export default defineComponent({
-  name: 'HelloWorld',
-  props: {
-    msg: String,
-  },
+  name: 'Timeline',
+
+  setup(){
+    const periods = ['Today', 'This Week', 'This Month']
+    const currentPeriod = ref<Period>('Today')
+    const posts = computed(()=> { return [today, thisWeek, thisMonth].filter(post => {
+      if (currentPeriod.value === 'Today'){
+        return post.created.isAfter(moment().subtract(1,'day'))
+      }
+      if (currentPeriod.value === 'This Week'){
+        return post.created.isAfter(moment().subtract(1,'week'))
+      } if (currentPeriod.value === 'This Month'){
+        return post.created.isAfter(moment().subtract(1,'month'))
+      }
+      return false
+    })})
+
+    const setPeriod = (period: Period)=>{
+      currentPeriod.value = period
+    }
+
+    return { periods, currentPeriod, setPeriod, posts }
+  }
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
