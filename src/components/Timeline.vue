@@ -1,32 +1,46 @@
 <template>
   <nav class="is-primary panel">
     <span class="panel-tabs">
-     <a href="" v-for="period in periods" :key="period" :class="{'is-active': period === currentPeriod}" @click.prevent="setPeriod(period)">
+     <a href=""  v-for="period in periods" :key="period" :class="{'is-active': period === currentPeriod}" :data-test="period" @click.prevent="setPeriod(period)">
        {{period}}
      </a>
     </span>
-
-    <a href="" v-for="post in posts" :key="post.id" class="panel-block">
-      <a href="">{{post.title}}</a>
-      <div>{{post.created.format('Do MMM')}}</div>
-    </a>
+    <TimelinePost v-for="post in posts" :key="post.id" :post="post"></TimelinePost>
   </nav>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue';
 import moment from "moment";
-import { today, thisWeek, thisMonth} from "@/mocks";
+import { today, thisWeek, thisMonth, Post} from "@/mocks";
+import {useStore} from "@/store";
+import TimelinePost from "@/components/TimelinePost.vue";
 
 type Period = 'Today' | 'This Week' | 'This Month'
 
+function delay(){
+  return new Promise(res => {
+    setTimeout(res,2000)
+  })
+}
+
 export default defineComponent({
   name: 'Timeline',
+  components: {TimelinePost},
 
-  setup(){
+async  setup(){
+    await delay()
     const periods = ['Today', 'This Week', 'This Month']
     const currentPeriod = ref<Period>('Today')
-    const posts = computed(()=> { return [today, thisWeek, thisMonth].filter(post => {
+    const store = useStore()
+    const allPosts: Post[] = store.getState().posts.ids.reduce<Post[]>((acc, id)=>{
+      const thePost = store.getState().posts.all.get(id)
+      if (!thePost){
+        throw Error('this post was not found')
+      }
+      return acc.concat(thePost)
+    },[])
+    const posts = computed(()=> { return allPosts.filter(post => {
       if (currentPeriod.value === 'Today'){
         return post.created.isAfter(moment().subtract(1,'day'))
       }
