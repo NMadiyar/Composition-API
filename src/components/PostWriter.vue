@@ -18,6 +18,12 @@
      <div v-html="html"></div>
     </div>
   </div>
+
+  <div class="columns">
+    <div class="column">
+      <button class="button is-primary is-pulled-right" @click="save">Submit</button>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -36,8 +42,13 @@ export default defineComponent({
       required: true
     }
   },
+  emits: {
+    save: (post: Post) => {
+      return true
+    }
+  },
 
-  setup(props){
+  setup(props, ctx){
     const title = ref(props.post.title)
     const content = ref('## Title\nEnter your post content...')
     const contentEditable = ref<HTMLDivElement | null>(null)
@@ -75,7 +86,17 @@ export default defineComponent({
       contentEditable.value.innerText = content.value
     })
 
-    return {title, content, contentEditable, handleInput, html}
+    const save = () => {
+      const newPost: Post = {
+        ...props.post,
+        title: title.value,
+        html: html.value,
+        markdown: content.value
+      }
+      ctx.emit('save', newPost)
+    }
+
+    return {title, content, contentEditable, handleInput, html, save}
   }
 
 });
