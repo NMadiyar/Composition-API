@@ -1,15 +1,8 @@
 <template>
   <section class="section">
     <div class="container">
-      <suspense>
-        <template #default>
-        <Timeline></Timeline>
-        </template>
-
-        <template #fallback>
-          <Spinner></Spinner>
-        </template>
-      </suspense>
+      <Navbar></Navbar>
+      <router-view/>
     </div>
   </section>
 
@@ -17,25 +10,21 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import Timeline from "@/components/Timeline.vue";
-import Spinner from "@/components/Spinner.vue";
+import Navbar from "@/components/Navbar.vue";
+
 
 export default defineComponent({
   name: 'App',
-  components: {
-    Spinner,
-    Timeline,
-  }
+  components: {Navbar},
 });
 </script>
 
 <style>
-@import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   margin-top: 60px;
 }
