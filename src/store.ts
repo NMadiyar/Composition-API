@@ -24,6 +24,11 @@ class Store {
     getState(){
         return readonly(this.state)
     }
+    async createPost(post: Post){
+        const response = await axios.post<Post>('/posts', post)
+        this.state.posts.all.set(post.id,response.data)
+        this.state.posts.ids.push(post.id)
+    }
 
     async fetchPosts(){
         const response = await axios.get<Post[]>('/posts')

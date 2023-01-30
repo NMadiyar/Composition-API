@@ -3,7 +3,7 @@
     <div class="column">
       <div class="field">
         <div class="label">New Post</div>
-        <input type="text" class="input" v-model="title"/>{{title}}
+        <input type="text" class="input" v-model="title" data-test="title"/>{{title}}
 
       </div>
     </div>
@@ -11,7 +11,7 @@
 
   <div class="columns">
     <div class="column is-one-half">
-      <div contenteditable ref="contentEditable" @input="handleInput"></div>
+      <div contenteditable ref="contentEditable" @input="handleInput" data-test="content"></div>
     </div>
 
     <div class="column is-one-half">
@@ -21,7 +21,7 @@
 
   <div class="columns">
     <div class="column">
-      <button class="button is-primary is-pulled-right" @click="save">Submit</button>
+      <button class="button is-primary is-pulled-right" @click="save" data-test="submit">Submit</button>
     </div>
   </div>
 </template>

@@ -6,4 +6,7 @@
       </div>
     </div>
   </div>
+  <teleport to="#modal">
+    <div>Modal</div>
+  </teleport>
 </template>
