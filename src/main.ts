@@ -5,6 +5,7 @@ import {thisMonth, thisWeek, today} from "@/mocks";
 import {router} from "@/router";
 import random  from 'lodash/random'
 import 'highlight.js/styles/atom-one-dark.css'
+import {Author, store, storeKey, User} from "@/store";
 
 
 function delay(){
@@ -33,8 +34,23 @@ axios.post = async (url: string, post: Post)=>{
         })
     }
 }
+//@ts-ignore
+axios.post = async (url: string, user: User)=>{
+    if (url === '/users') {
+        const id = random(100,10000)
+        await delay()
+        const author: Author = {
+            id: id.toString(),
+            username: user.username
+        }
+        return Promise.resolve({
+            data: author
+        })
+    }
+}
 
 const app = createApp(App)
 
 app.use(router)
+app.use(store)
 app.mount('#app')

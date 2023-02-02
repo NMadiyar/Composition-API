@@ -3,6 +3,7 @@ import Timeline from "@/components/Timeline.vue";
 import {today, thisWeek, thisMonth} from "@/mocks";
 import {nextTick} from "vue";
 import {defineComponent} from "vue";
+import {Store} from "@/store";
 
 export default defineComponent({
     components: {Timeline}
@@ -17,7 +18,15 @@ jest.mock('axios', ()=> ({
 }))
 
 function mountTimeline(){
-    return mount({
+    // @ts-ignore
+    const store = new Store({
+        posts: {
+            ids: [],
+            all: new Map(),
+            loaded: false
+        }
+    })
+    const testComp = {
         components: {Timeline},
         template: `
         <suspense>
@@ -28,6 +37,11 @@ function mountTimeline(){
           Loading...
         </template>
         <suspense/>`
+    }
+    return mount(testComp,{
+        global: {
+           plugins: [store]
+        }
     })
 }
 describe('Timeline', ()=>{
@@ -50,7 +64,7 @@ describe('Timeline', ()=>{
     expect(wrapper.html()).toContain(thisWeek.created.format('Do MMM'))
   });
 
-  it.only('update when the period is click',async () => {
+  it('update when the period is click',async () => {
       const wrapper = mountTimeline()
       await flushPromises()
    await wrapper.get('[data-test="This Month"]').trigger('click')

@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent} from 'vue';
+import {computed, defineComponent, ref} from 'vue';
 import Navbar from "@/components/Navbar.vue";
 import {useModal} from "@/useModal";
 
@@ -28,6 +28,7 @@ export default defineComponent({
   components: {Navbar},
   setup(){
     const modal = useModal()
+
     const style = computed(()=>{
       return{
         display: modal.show.value ? 'block' : 'none'
