@@ -1,4 +1,9 @@
 <template>
+  <div class="message is-primary is-marginless">
+    <div class="message-header">
+      <div>Posts for {{ currentPeriod.toLowerCase()}}</div>
+    </div>
+  </div>
   <nav class="is-primary panel">
     <span class="panel-tabs">
      <a href=""  v-for="period in periods" :key="period" :class="{'is-active': period === currentPeriod}" :data-test="period" @click.prevent="setPeriod(period)">

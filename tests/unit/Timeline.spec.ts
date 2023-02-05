@@ -1,4 +1,4 @@
-import {flushPromises, mount} from '@vue/test-utils'
+import {flushPromises, mount, RouterLinkStub} from '@vue/test-utils'
 import Timeline from "@/components/Timeline.vue";
 import {today, thisWeek, thisMonth} from "@/mocks";
 import {nextTick} from "vue";
@@ -18,12 +18,17 @@ jest.mock('axios', ()=> ({
 }))
 
 function mountTimeline(){
-    // @ts-ignore
     const store = new Store({
         posts: {
             ids: [],
             all: new Map(),
             loaded: false
+        },
+        authors: {
+           ids: [],
+           all: new Map(),
+           loaded: false,
+           currentUserId: undefined
         }
     })
     const testComp = {
@@ -40,6 +45,9 @@ function mountTimeline(){
     }
     return mount(testComp,{
         global: {
+            components: {
+                RouterLink: RouterLinkStub
+            },
            plugins: [store]
         }
     })
